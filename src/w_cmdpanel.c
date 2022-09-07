@@ -173,6 +173,8 @@ menu_def file_menu_items[] = {
 
 menu_def edit_menu_items[] = {
 	{"Undo               (Meta-U) ", 0, undo, False},
+	{"Redo               (Meta-R) ", 0, redo, False},
+
 	{"Paste Objects      (Meta-T) ", 0, paste, False},
 	{"Paste Text         (F18/F20)", 6, paste_primary_selection, False},
 	{"Search/Replace...  (Meta-I) ", -1, popup_search_panel, False},

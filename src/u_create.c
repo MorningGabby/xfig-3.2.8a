@@ -696,6 +696,33 @@ create_compound(void)
     return c;
 }
 
+F_history		*
+create_history(void)
+{
+	F_history *h;
+    if ((h = (F_history *) malloc(HISOBJ_SIZE)) == NULL) {
+	put_msg(Err_mem);
+	return NULL;
+	}
+	h->last_action = -1;
+	h->last_object = -1;
+	h->new_x = 0;
+	h->new_y = 0;
+	h->last_x = 0;
+	h->last_y = 0;
+	h->last_arcpointnum = 0;
+	h->last_selected_sfactor = NULL;
+	h->latest_line = NULL;
+	h->next = NULL;
+	h->saved_for_arrow = NULL;
+	h->saved_back_arrow = NULL;
+	h->last_selected_point = NULL;
+	h->last_prev_point = NULL;
+	h->saved_objects = NULL;
+	
+	return h;
+}
+
 F_compound     *
 copy_compound(F_compound *c)
 {

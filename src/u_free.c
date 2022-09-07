@@ -28,6 +28,7 @@
 #include "u_fonts.h"
 #include "u_free.h"
 #include "w_drawprim.h"
+#include "mode.h"
 
 
 void free_arc(F_arc **list)
@@ -69,6 +70,29 @@ void free_compound(F_compound **list)
 	compound = NULL;
     }
     *list = NULL;
+}
+
+void free_history(F_history **list)
+{
+	if((*list) == NULL)
+		return;
+
+	F_history *h, *history;
+	
+	for (h = *list; h != NULL;) {
+	history = h;
+	h = h->next;
+	//only free history if last action is add. Don't free if object was moved/scaled/etc.
+	if(history->last_action == F_ADD)
+	{
+		free_compound(&history->saved_objects);
+		free_points(history->last_prev_point);
+		free_points(history->last_selected_point);
+	}
+	free((char *) history);
+
+	}
+	*list = NULL;
 }
 
 void free_ellipse(F_ellipse **list)

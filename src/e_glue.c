@@ -197,6 +197,9 @@ create_compoundobject(int x, int y)
     list_add_compound(&objects.compounds, c);
     mask_toggle_compoundmarker(c);
     set_latestcompound(c);
+
+    undo_update_history();
+
     set_modifiedflag();
     compound_selected();
     draw_mousefun_canvas();

@@ -248,6 +248,7 @@ splinepoint_adding(F_spline *spline, F_point *left_point, F_point *added_point, 
     set_last_selectedpoint(added_point);
     set_action_object(F_ADD_POINT, O_SPLINE);
     set_latestspline(spline);
+    undo_update_history();
 
     reset_cursor();
 }
@@ -330,6 +331,8 @@ linepoint_adding(F_line *line, F_point *left_point, F_point *added_point)
     set_latestline(line);
     set_last_prevpoint(left_point);
     set_last_selectedpoint(added_point);
+
+    undo_update_history();
 
     set_modifiedflag();
 }

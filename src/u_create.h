@@ -24,6 +24,8 @@ extern F_line     *create_line(void);
 extern F_spline   *create_spline(void);
 extern F_text     *create_text(void);
 extern F_compound *create_compound(void);
+extern F_history  *create_history(void);
+
 extern F_pic      *create_pic(void);
 extern F_point    *create_point(void);
 extern F_sfactor  *create_sfactor(void);

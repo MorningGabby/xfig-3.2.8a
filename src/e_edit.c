@@ -1118,6 +1118,10 @@ done_figure_comments(void)
 	copy_comments(&s, &objects.comments);
 	clean_up();
 	set_action_object(F_EDIT, O_FIGURE);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -1540,6 +1544,10 @@ done_compound(void)
 	old_c->next = new_c;
 	set_latestcompound(old_c);
 	set_action_object(F_EDIT, O_COMPOUND);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	remove_compound_depth(old_c);
 	add_compound_depth(new_c);
@@ -2252,6 +2260,10 @@ done_line(void)
 	old_l->next = new_l;
 	set_latestline(old_l);
 	set_action_object(F_EDIT, O_POLYLINE);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -2515,6 +2527,10 @@ done_text(void)
 	old_t->next = new_t;
 	set_latesttext(old_t);
 	set_action_object(F_EDIT, O_TXT);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -2668,6 +2684,10 @@ done_ellipse(void)
 	old_e->next = new_e;
 	set_latestellipse(old_e);
 	set_action_object(F_EDIT, O_ELLIPSE);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -2800,6 +2820,10 @@ done_arc(void)
 	old_a->next = new_a;
 	set_latestarc(old_a);
 	set_action_object(F_EDIT, O_ARC);
+
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -2901,6 +2925,10 @@ done_spline(void)
 	old_s->next = new_s;
 	set_latestspline(old_s);
 	set_action_object(F_EDIT, O_SPLINE);
+	
+	//undo redo
+	undo_update_history();
+
 	set_modifiedflag();
 	break;
       case CANCEL:
@@ -2967,6 +2995,10 @@ done_spline_point(void)
       case DONE:
 	new_s->next = NULL;
 	change_spline(old_s, new_s);
+
+	//undo redo
+	undo_update_history();
+
 	redisplay_spline(new_s);
 	break;
       case CANCEL:

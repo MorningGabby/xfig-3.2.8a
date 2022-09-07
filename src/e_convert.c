@@ -141,6 +141,9 @@ box_2_box(F_line *old_l)
     set_modifiedflag();
     /* save pointer to this line for undo */
     latest_line = new_l;
+
+    undo_update_history();
+	
     redisplay_line(new_l);
     return;
 }
@@ -211,6 +214,9 @@ line_spline(F_line *l, int type_value)
     redisplay_spline(s);
     set_action_object(F_CONVERT, O_POLYLINE);
     set_latestspline(s);
+
+    undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -222,7 +228,11 @@ spline_line(F_spline *s)
 
     /* Now we turn s into a line */
     if ((l = create_line()) == NULL)
+	{
 	return;
+	}
+
+	set_freeze_undo_additions(True);
 
     if (open_spline(s)) {
 	l->type = T_POLYLINE;
@@ -267,6 +277,8 @@ spline_line(F_spline *s)
     } else {
 	l->back_arrow = NULL;
     }
+	
+	set_freeze_undo_additions(True);
 
     /* now we have finished creating the line, we can get rid of the spline */
     delete_spline(s);
@@ -277,6 +289,9 @@ spline_line(F_spline *s)
     redisplay_line(l);
     set_action_object(F_CONVERT, O_SPLINE);
     set_latestline(l);
+    set_freeze_undo_additions(False);
+    undo_update_history();
+
     set_modifiedflag();
     return;
 }
@@ -329,6 +344,8 @@ toggle_polyline_polygon(F_line *line, F_point *previous_point, F_point *selected
   set_last_selectedpoint(line->points);
   set_last_prevpoint(NULL);
   set_latestline(line);
+  undo_update_history();
+
   set_modifiedflag();
 }
 
@@ -415,6 +432,8 @@ toggle_open_closed_spline(F_spline *spline, F_point *previous_point, F_point *se
   set_last_selectedpoint(spline->points);
   set_last_prevpoint(NULL);
   set_latestspline(spline);
+  undo_update_history();
+
   set_modifiedflag();
 }
 

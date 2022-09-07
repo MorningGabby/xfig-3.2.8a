@@ -155,6 +155,10 @@ static XtActionsRec	main_actions[] =
     {"PopupCharmap",	(XtActionProc) popup_character_map},
     {"PopupGlobals",	(XtActionProc) show_global_settings},
     {"Undo",		(XtActionProc) undo},
+
+	//undo redo
+    {"Redo",		(XtActionProc) redo},
+
     {"Paste",		(XtActionProc) paste},
     {"SpellCheck",	(XtActionProc) spell_check},
     {"Search",		(XtActionProc) popup_search_panel},

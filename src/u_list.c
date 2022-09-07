@@ -185,6 +185,76 @@ list_delete_compound(F_compound **list, F_compound *compound)
     compound->next = NULL;
 }
 
+void list_delete_objects(F_compound *list, F_compound *objects_to_delete)
+{
+	if(objects_to_delete->arcs)
+	{
+		F_arc *a = objects_to_delete->arcs;
+		F_arc *tmp = NULL;
+		for(; a != NULL; a = a->next)
+		{
+
+			tmp = a->next;
+			list_delete_arc(&(list->arcs), a);	
+		}
+
+	}
+	if(objects_to_delete->compounds)
+	{
+		F_compound *c = objects_to_delete->compounds;
+		F_compound *tmp = NULL;
+		for(; c != NULL; c = c->next)
+		{
+
+			tmp = c->next;
+			list_delete_compound(&(list->compounds), c);	
+		}
+
+	}
+	if(objects_to_delete->ellipses)
+	{
+		F_ellipse *e = objects_to_delete->ellipses;
+		F_ellipse *tmp = NULL;
+		for(; e != NULL; e = e->next)
+		{
+			tmp = e->next;
+			list_delete_ellipse(&(list->ellipses), e);	
+			e->next = tmp;
+		}
+			//fprintf(stderr, "e: %x\n", e);
+	}
+    if (objects_to_delete->lines) {
+		F_line *l = objects_to_delete->lines;
+		F_line *tmp = NULL;
+		for(; l != NULL; l = l->next)
+		{
+
+			tmp = l->next;
+			list_delete_line(&(list->lines), l);	
+		}
+	}
+    if (objects_to_delete->splines) {
+		F_spline *s = objects_to_delete->splines;
+		F_spline *tmp = NULL;
+		for(; s != NULL; s = s->next)
+		{
+
+			tmp = s->next;
+			list_delete_spline(&(list->splines), s);	
+		}
+    }
+    if (objects_to_delete->texts) {
+		F_text *t = objects_to_delete->texts;
+		F_text *tmp = NULL;
+		for(; t != NULL; t = t->next)
+		{
+
+			tmp = t->next;
+			list_delete_text(&(list->texts), t);	
+		}
+    }
+}
+
 void
 remove_depth(int type, int depth)
 {
@@ -400,6 +470,7 @@ add_depth(int type, int depth)
 
     object_depths[depth]++;
 
+	fprintf(stdout,"add depth %d, count=%d\n",depth,object_depths[depth]);
     if (appres.DEBUG)
 	fprintf(stderr,"add depth %d, count=%d\n",depth,object_depths[depth]);
     /* add one to the counter for this object type */
@@ -491,6 +562,8 @@ delete_line(F_line *old_l)
     clean_up();
     set_latestline(old_l);
     set_action_object(F_DELETE, O_POLYLINE);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -501,6 +574,8 @@ delete_arc(F_arc *old_a)
     clean_up();
     set_latestarc(old_a);
     set_action_object(F_DELETE, O_ARC);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -511,6 +586,8 @@ delete_ellipse(F_ellipse *old_e)
     clean_up();
     set_latestellipse(old_e);
     set_action_object(F_DELETE, O_ELLIPSE);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -521,6 +598,8 @@ delete_text(F_text *old_t)
     clean_up();
     set_latesttext(old_t);
     set_action_object(F_DELETE, O_TXT);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -531,6 +610,9 @@ delete_spline(F_spline *old_s)
     clean_up();
     set_latestspline(old_s);
     set_action_object(F_DELETE, O_SPLINE);
+
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -541,6 +623,9 @@ delete_compound(F_compound *old_c)
     clean_up();
     set_latestcompound(old_c);
     set_action_object(F_DELETE, O_COMPOUND);
+
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -555,6 +640,8 @@ add_line(F_line *new_l)
     clean_up();
     set_latestline(new_l);
     set_action_object(F_ADD, O_POLYLINE);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -565,6 +652,8 @@ add_arc(F_arc *new_a)
     clean_up();
     set_latestarc(new_a);
     set_action_object(F_ADD, O_ARC);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -575,6 +664,8 @@ add_ellipse(F_ellipse *new_e)
     clean_up();
     set_latestellipse(new_e);
     set_action_object(F_ADD, O_ELLIPSE);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -585,6 +676,8 @@ add_text(F_text *new_t)
     clean_up();
     set_latesttext(new_t);
     set_action_object(F_ADD, O_TXT);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -595,6 +688,8 @@ add_spline(F_spline *new_s)
     clean_up();
     set_latestspline(new_s);
     set_action_object(F_ADD, O_SPLINE);
+	undo_update_history();
+
     set_modifiedflag();
 }
 
@@ -605,6 +700,8 @@ add_compound(F_compound *new_c)
     clean_up();
     set_latestcompound(new_c);
     set_action_object(F_ADD, O_COMPOUND);
+	undo_update_history();
+
     set_modifiedflag();
 }
 

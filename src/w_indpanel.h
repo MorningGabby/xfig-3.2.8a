@@ -110,6 +110,9 @@ extern Dimension UPD_CTRL_WD;		/* actual width is det. in setup_ind_panel */
 #define I_ADD_DEL_ARROW (I_LINEWIDTH | I_ARROWTYPE | I_ARROWSIZE)
 #define I_TANGENT       (I_MIN2 | I_LINE1 | I_DEPTH | I_ARROWTYPE | I_ARROWMODE | I_TANGNORMLEN)
 
+// #taskSendBack_Icon
+#define I_DEPTHCTRL 	(I_DEPTH)
+
 /* for checking which parts to update */
 #define I_UPDATEMASK	(I_OBJECT)
 

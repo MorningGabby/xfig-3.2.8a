@@ -215,7 +215,6 @@ wrapup_scale(void)
 static Boolean
 init_boxscale_ellipse(int x, int y)
 {
-	/* #Task8 */
     double	    dx, dy, l;
 
     if (cur_e->type == T_ELLIPSE_BY_RAD ||
@@ -300,6 +299,10 @@ fix_boxscale_ellipse(int x, int y)
     dx = 1.0 * new_e->radiuses.x / cur_e->radiuses.x;
     dy = 1.0 * new_e->radiuses.y / cur_e->radiuses.y;
     change_ellipse(cur_e, new_e);
+
+	set_action_object(F_SCALE, O_ELLIPSE);
+	undo_update_history();
+
     wrapup_scale();
     /* redraw anything under the old ellipse */
     redisplay_ellipse(cur_e);
@@ -576,7 +579,6 @@ cancel_scale_spline(void)
 static void
 fix_scale_spline(int x, int y)
 {
-	/* #Task8 */
     elastic_scalepts(cur_s->points);
     canvas_ref_proc = null_proc;
     adjust_box_pos(x, y, from_x, from_y, &x, &y);
@@ -584,11 +586,14 @@ fix_scale_spline(int x, int y)
     old_s = copy_spline(cur_s);
     clean_up();
     set_latestspline(old_s);
-    set_action_object(F_EDIT, O_SPLINE);
+    set_action_object(F_SCALE, O_SPLINE);
+
     old_s->next = cur_s;
     /* now change the original to become the new object */
     rescale_points((F_line *)cur_s, x, y);
     wrapup_scale();
+	undo_update_history();
+
     /* redraw anything under the old spline */
     redisplay_spline(old_s);
     /* and the new one */
@@ -719,7 +724,6 @@ fix_boxscale_compound(int x, int y)
 static void
 init_scale_compound(void)
 {
-	/* #Task8 */
     fix_x = (cur_c->nwcorner.x + cur_c->secorner.x) / 2;
     fix_y = (cur_c->nwcorner.y + cur_c->secorner.y) / 2;
     set_action_on();
@@ -754,10 +758,13 @@ fix_scale_compound(int x, int y)
     old_c = copy_compound(cur_c);
     clean_up();
     set_latestcompound(old_c);
-    set_action_object(F_EDIT, O_COMPOUND);
+    set_action_object(F_SCALE, O_COMPOUND);
+
     old_c->next = cur_c;
     /* now change the original to become the new object */
     prescale_compound(cur_c, cur_x, cur_y);
+	undo_update_history();
+
     wrapup_scale();
     /* redraw anything under the old compound */
     redisplay_compound(old_c);
@@ -1372,7 +1379,6 @@ cancel_scale_line(void)
 static void
 fix_scale_line(int x, int y)
 {
-	/* #Task8 */
     int		owd,oht, nwd, nht;
 
     elastic_scalepts(cur_l->points);
@@ -1383,7 +1389,8 @@ fix_scale_line(int x, int y)
     old_l = copy_line(cur_l);
     clean_up();
     set_latestline(old_l);
-    set_action_object(F_EDIT, O_POLYLINE);
+    set_action_object(F_SCALE, O_POLYLINE);
+
     old_l->next = cur_l;
     /* now change the original to become the new object */
     rescale_points(cur_l, x, y);
@@ -1395,6 +1402,8 @@ fix_scale_line(int x, int y)
 	nht = abs(cur_l->points->y - cur_l->points->next->next->y);
 	scale_radius(cur_l, cur_l, owd, oht, nwd, nht);
     }
+	undo_update_history();
+
     wrapup_scale();
     /* redraw anything under the old line */
     redisplay_line(old_l);
